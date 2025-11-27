@@ -11,20 +11,21 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ABL_SPIN_PRIZES")
-public class Prize {
+@Table(name = "ABL_SPIN_DAILY_PRIZE")
+public class DailyPrizeLimit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "PRIZE", nullable = false)
-    private String prizeName;
+    @Column(name = "DAY")
+    private Integer day;
 
-    @Column(name = "QUANTITY", nullable = false)
-    private Integer quantity;
+    @Column(name = "AVAILABLE_QUANTITY")
+    private Integer availableQuantity;
 
-//    @Column(name = "DROP_RATE", nullable = false)
-//    private Integer dropRate;
+    @ManyToOne
+    private Prize prize;
 }
+

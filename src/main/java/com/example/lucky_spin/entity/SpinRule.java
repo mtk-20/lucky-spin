@@ -11,20 +11,17 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ABL_SPIN_PRIZES")
-public class Prize {
+@Table(name = "ABL_SPIN_RULE")
+public class SpinRule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "PRIZE", nullable = false)
-    private String prizeName;
+    @Column(name = "RULE_KEY")
+    private String ruleKey;
 
-    @Column(name = "QUANTITY", nullable = false)
-    private Integer quantity;
-
-//    @Column(name = "DROP_RATE", nullable = false)
-//    private Integer dropRate;
+    @Column(name = "RULE_VALUE")
+    private String ruleValue;
 }

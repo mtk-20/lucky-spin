@@ -2,6 +2,7 @@ package com.example.lucky_spin.controller;
 
 import com.example.lucky_spin.common.response.ResponseFactory;
 import com.example.lucky_spin.dto.PrizeUpdateDto;
+import com.example.lucky_spin.entity.DailyPrizeLimit;
 import com.example.lucky_spin.entity.Prize;
 import com.example.lucky_spin.service.PrizeService;
 import lombok.RequiredArgsConstructor;
@@ -84,4 +85,16 @@ public class PrizeController {
                 "204",
                 "Prize " + id + " Deleted.");
     }
+
+    @PostMapping("/limit/{id}")
+    public ResponseEntity<?> handleSetDailyLimit(@PathVariable("id") Long id, @RequestParam int day, @RequestParam int availableQuantity) {
+        DailyPrizeLimit limit = service.setDailyLimit(id, day, availableQuantity);
+
+        return factory.buildSuccess(
+                HttpStatus.OK,
+                limit,
+                "200",
+                "Daily Limit Set.");
+    }
+
 }

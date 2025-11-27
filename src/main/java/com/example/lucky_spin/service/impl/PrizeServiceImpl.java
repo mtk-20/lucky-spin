@@ -2,7 +2,9 @@ package com.example.lucky_spin.service.impl;
 
 import com.example.lucky_spin.common.exception.CommonException;
 import com.example.lucky_spin.dto.PrizeUpdateDto;
+import com.example.lucky_spin.entity.DailyPrizeLimit;
 import com.example.lucky_spin.entity.Prize;
+import com.example.lucky_spin.repo.DailyPrizeLimitRepo;
 import com.example.lucky_spin.repo.PrizeRepo;
 import com.example.lucky_spin.service.PrizeService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.List;
 public class PrizeServiceImpl implements PrizeService {
 
     private final PrizeRepo repo;
+    private final DailyPrizeLimitRepo limitRepo;
 
     @Override
     public Prize create(Prize prize) {
@@ -34,7 +37,7 @@ public class PrizeServiceImpl implements PrizeService {
 
     @Override
     public List<Prize> gatAllAvailable() {
-        return repo.findByQuantityGraterThan(0);
+        return repo.findByQuantityGreaterThan(0);
     }
 
     @Override
@@ -42,7 +45,7 @@ public class PrizeServiceImpl implements PrizeService {
         Prize prize = repo.findById(id).orElseThrow(() -> new CommonException("ERR_404", "Prize ID " + id + " Not Found."));
         prize.setPrizeName(dto.getPrizeName());
         prize.setQuantity(dto.getQuantity());
-        prize.setDropRate(dto.getDropRate());
+//        prize.setDropRate(dto.getDropRate());
         return repo.save(prize);
     }
 
@@ -52,6 +55,16 @@ public class PrizeServiceImpl implements PrizeService {
             throw new CommonException("ERR_404", "Prize ID " + id + " Not Found.");
         }
         repo.deleteById(id);
+    }
+
+    @Override
+    public DailyPrizeLimit setDailyLimit(Long id, int day, int availableQuantity) {
+        Prize prize = repo.findById(id).orElseThrow(() -> new CommonException("ERR_404", "Prize ID " + id + " Not Found."));
+        DailyPrizeLimit limit = limitRepo.findByDayAndPrizeId(day, id).orElse(new DailyPrizeLimit());
+        limit.setDay(day);
+        limit.setAvailableQuantity(availableQuantity);
+        limit.setPrize(prize);
+        return limitRepo.save(limit);
     }
 
     @Transactional

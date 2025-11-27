@@ -6,25 +6,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ABL_SPIN_PRIZES")
-public class Prize {
+@Table(name = "ABL_SPIN_WINNER_LIST")
+public class WinnerList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "PRIZE", nullable = false)
-    private String prizeName;
+    @Column(name = "PHONE_NUMBER")
+    private String phoneNumber;
 
-    @Column(name = "QUANTITY", nullable = false)
-    private Integer quantity;
+    @Column(name = "DAY")
+    private Integer day;
 
-//    @Column(name = "DROP_RATE", nullable = false)
-//    private Integer dropRate;
+    @Column(name = "SPIN_TIME")
+    private LocalDateTime spinTime;
+
+    @ManyToOne
+    private Prize prize;
 }

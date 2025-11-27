@@ -13,17 +13,26 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ABL_SPIN_RESULTS")
-public class SpinResult {
+@Table(name = "ABL_SPIN_HISTORY")
+public class SpinHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
+    @Column(name = "PHONE_NUMBER")
     private String phoneNumber;
 
-    private String prizeName;
+//    @Column(name = "PRIZE_NAME")
+//    private String prizeName;
 
+    @Column(name = "DAY")
+    private Integer day;
+
+    @Column(name = "SPIN_TIME")
     private LocalDateTime spinTime;
+
+    @Column(name = "PRIZE")
+    private String prize;
 }
