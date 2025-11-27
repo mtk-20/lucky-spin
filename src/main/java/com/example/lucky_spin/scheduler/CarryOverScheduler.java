@@ -15,7 +15,7 @@ public class CarryOverScheduler {
     private final DailyPrizeLimitRepo repo;
 
     //    @Scheduled(cron = "0 0 0 * * ?")
-    @Scheduled(fixedRate = 300000)
+//    @Scheduled(fixedRate = 300000)
     public void carryOverRemainingPrizes() {
         for (int day = 1; day <= 2; day++) {
             List<DailyPrizeLimit> todayLimits = repo.findByDay(day);
