@@ -7,6 +7,7 @@ import com.example.lucky_spin.service.SpinRuleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -19,6 +20,13 @@ public class SpinRuleServiceImpl implements SpinRuleService {
     public int getInt(String key) {
         return repo.findByRuleKey(key)
                 .map(r -> Integer.parseInt(r.getRuleValue()))
+                .orElseThrow(() -> new CommonException("ERR_404", "Rule not found: " + key));
+    }
+
+    @Override
+    public LocalDate getDate(String key) {
+        return repo.findByRuleKey(key)
+                .map(r -> LocalDate.parse(r.getRuleValue()))
                 .orElseThrow(() -> new CommonException("ERR_404", "Rule not found: " + key));
     }
 

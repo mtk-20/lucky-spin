@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -40,15 +41,10 @@ public class SpinServiceImpl implements SpinService {
             return SpinResultDto.error("EVENT_COMPLETED.");
         }
 
-        int maxSpinsPerDay = service.getInt("max_spins_per_day");
+        int maxSpins = service.getInt("max_spins_per_day");
+        int used = spinHistoryRepo.countTodaySpins(phoneNumber, today);
 
-        if (maxSpinsPerDay <= 0) {
-            return SpinResultDto.error("SPIN_DISABLED");
-        }
-
-        int usedSpins = spinHistoryRepo.countTodaySpins(phoneNumber, today);
-
-        if (usedSpins >= maxSpinsPerDay) {
+        if (used >= maxSpins) {
             return SpinResultDto.error("SPIN_LIMIT_REACHED");
         }
 
@@ -92,12 +88,27 @@ public class SpinServiceImpl implements SpinService {
     }
 
     private int getEventDay(LocalDate today) {
-        LocalDate day1 = LocalDate.of(2025, 11, 27);
-        LocalDate day2 = day1.plusDays(1);
-        LocalDate day3 = day1.plusDays(2);
-        if (today.isEqual(day1)) return 1;
-        if (today.isEqual(day2)) return 2;
-        if (today.isEqual(day3)) return 3;
-        return -1;
+//        LocalDate day1 = LocalDate.of(2025, 11, 27);
+//        LocalDate day2 = day1.plusDays(1);
+//        LocalDate day3 = day1.plusDays(2);
+//        if (today.isEqual(day1)) return 1;
+//        if (today.isEqual(day2)) return 2;
+//        if (today.isEqual(day3)) return 3;
+//        return -1;
+
+        LocalDate start = service.getDate("event_start_date");
+        int totalDays = service.getInt("event_day");
+
+        if (today.isBefore(start)) {
+            return -1;
+        }
+
+        long daysPassed = ChronoUnit.DAYS.between(start, today);
+
+        if (daysPassed >= totalDays) {
+            return -1;
+        }
+
+        return (int) daysPassed + 1;
     }
 }
